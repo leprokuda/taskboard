@@ -120,7 +120,7 @@ header {
 
 .taskboard__checkbox input:checked + div {
   background-color: var(--accent);
-  background-image: url(/src/img/checkmark.svg);
+  background-image: url(../src/img/checkmark.svg);
 }
 
 
