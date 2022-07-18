@@ -13,7 +13,7 @@ body {
   height: 100vh;
   justify-content: center;
   padding: 32px;
-  font-size: 18px;
+  font-size: 22px;
   font-weight: 300;
 }
 
@@ -49,6 +49,12 @@ header {
 .taskboard__title {
 }
 
+.taskboard__tasks-count {
+  margin-top: 20px;
+  margin-bottom: 20px;
+  font-size: 27px;
+}
+
 .taskboard__new {
   --size: 50px;
   display: flex;
@@ -57,7 +63,7 @@ header {
 
 .taskboard__new input {
   margin-right: 16px;
-  font-size: 18px;
+  font-size: 27px;
   padding: 8px 16px;
   height: var(--size);
   border: 1px solid var(--default);
@@ -120,7 +126,7 @@ header {
 
 .taskboard__checkbox input:checked + div {
   background-color: var(--accent);
-  background-image: url(./src/img/checkmark.svg);
+  background-image: url(../img/checkmark.svg);
 }
 
 
@@ -136,7 +142,7 @@ header {
 }
 
 .taskboard__task-text {
-  font-size: 20px;
+  font-size: 27px;
 }
 
 .taskboard__task-del {
