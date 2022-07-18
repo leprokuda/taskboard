@@ -1,0 +1,149 @@
+:root {
+  --accent: #ff7373;
+  --default: rgba(0, 0, 0, 0.3);
+}
+
+* {
+  margin: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: var(--accent);
+  height: 100vh;
+  justify-content: center;
+  padding: 32px;
+  font-size: 18px;
+  font-weight: 300;
+}
+
+header {
+  display: flex;
+  justify-content: center;
+}
+
+.header {
+  margin-bottom: 30px;
+  text-align: center;
+  background: white;
+  width: 300px;
+  border-radius: 16px;
+  padding: 5px 5px;
+}
+
+.taskboard {
+  display: flex;
+  justify-content: center;
+}
+
+.taskboard__container {
+  padding: 32px;
+  background-color: #fff;
+  width: 70vw;
+  border-radius: 16px;
+}
+
+.taskboard__content {
+}
+
+.taskboard__title {
+}
+
+.taskboard__new {
+  --size: 50px;
+  display: flex;
+  margin: 16px 0 32px;
+}
+
+.taskboard__new input {
+  margin-right: 16px;
+  font-size: 18px;
+  padding: 8px 16px;
+  height: var(--size);
+  border: 1px solid var(--default);
+  border-radius: 5px;
+  flex-grow: 1;
+}
+
+.taskboard__add,
+.taskboard__task-del {
+  cursor: pointer;
+  text-align: center;
+  height: var(--size);
+  width: var(--size);
+  border-radius: var(--size);
+  line-height: calc(var(--size) * 0.95);
+  font-size: 32px;
+  font-weight: 200;
+  background: var(--accent);
+  color: white;
+  /* border: 1px solid var(--default); */
+}
+
+.taskboard__list  > *:not(:last-child) {
+  margin-bottom: 16px;
+}
+
+.taskboard__task {
+  --size: 36px;
+  min-height: var(--size);
+  display: flex;
+  align-items: center;
+  cursor: default;
+}
+
+.taskboard__task:hover .taskboard__task-del {
+  display: block;
+}
+
+.taskboard__task_complete .taskboard__task-text {
+  text-decoration: line-through;
+  color: var(--default);
+}
+
+.taskboard__checkbox {
+  margin-right: 16px;
+}
+
+.taskboard__checkbox input {
+  display: none;
+}
+
+.taskboard__checkbox div {
+  height: 28px;
+  width: 28px;
+  border: 1px solid var(--accent);
+  border-radius: 8px;
+  position: relative;
+  cursor: pointer;
+}
+
+.taskboard__checkbox input:checked + div {
+  background-color: var(--accent);
+  background-image: url(/src/img/checkmark.svg);
+}
+
+
+
+.taskboard__checkbox div::after {
+  content: '';
+  display: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+.taskboard__task-text {
+  font-size: 20px;
+}
+
+.taskboard__task-del {
+  display: none;
+  
+  margin-left: auto;
+  margin-right: 0;
+  line-height: calc(var(--size) * 0.88);
+  font-size: 44px;
+}
