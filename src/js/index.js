@@ -59,7 +59,7 @@ function tasksListRender(list) {
   let htmlList = ''
 
   list.forEach((newTask) => {
-    
+
     const addClass = newTask.isComplete
     ? 'taskboard__task taskboard__task_complete'
     : 'taskboard__task'
@@ -87,7 +87,7 @@ function tasksListRender(list) {
   dom.tasksList.innerHTML = htmlList
 }
 
-// Отслеживаем клик по чекбоксу задачи, находим id и статус
+// Отслеживаем клик по чекбоксу задачи и применяем написанные функции
 
 dom.tasksList.onclick = (ev) => {
 
@@ -111,8 +111,11 @@ dom.tasksList.onclick = (ev) => {
     const taskId = task.getAttribute('id')
 
     deleteTask(taskId, tasksList)
+
+    renderTasksCount(count)
+
+    tasksListRender(tasksList)
   }
-  
 }
 
 // Функция изменения статуса задачи
@@ -134,7 +137,7 @@ function deleteTask(id, list) {
 
   list.forEach((task, idx) => {
     if (task.id == id) {
-      list.slpice(idx, 1)
+      list.splice(idx, 1)
     }
   })
 }
@@ -142,5 +145,10 @@ function deleteTask(id, list) {
 // Вывод количества задач
 
 function renderTasksCount(list) {
+  
   dom.count.innerHTML = list.length
+  
+  if (list.length === undefined) {
+    list.length = 0 
+  }
 }
