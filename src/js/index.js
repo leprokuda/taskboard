@@ -7,7 +7,14 @@ const dom = {
 
 // Массив задач
 
-const tasksList = []
+let tasksList = JSON.parse(localStorage.tasksList || "[]")
+
+// Возвращение данных из localstorage на страницу
+
+if(localStorage.getItem('taskboard')) {
+  tasksList = JSON.parse(localStorage.getItem('taskboard') || "[]")
+  tasksListRender(tasksList)
+}
 
 // Отслеживаем клик по кнопке Добавить задачу
 
@@ -16,11 +23,23 @@ dom.btnAdd.onclick = () => {
   const newTaskText = dom.new.value
 
   if (newTaskText && isNotHaveTask(newTaskText, tasksList)) {
+
     addTask(newTaskText, tasksList)
+
     dom.new.value = ''
+
     tasksListRender(tasksList)
   }
 }
+
+// document.addEventListener('keyup', function(ev) {
+//   if (ev.code === 'Enter') {
+//     addTask()
+
+//     dom.new.value = ''
+//     tasksListRender(tasksList)
+//   }
+// })
 
 // Функция добавления задачи
 
@@ -34,6 +53,8 @@ function addTask(text, list) {
   }
 
   list.push(newTask)
+
+  localStorage.setItem('taskboard', JSON.stringify(tasksList))
 }
 
 // Проверка существования одинаковых задач
@@ -87,7 +108,7 @@ function tasksListRender(list) {
   dom.tasksList.innerHTML = htmlList
 }
 
-// Отслеживаем клик по чекбоксу задачи и применяем написанные функции
+// Отслеживаем клик по чекбоксу задачи
 
 dom.tasksList.onclick = (ev) => {
 
@@ -116,6 +137,8 @@ dom.tasksList.onclick = (ev) => {
 
     tasksListRender(tasksList)
   }
+
+  localStorage.setItem('taskboard', JSON.stringify(tasksList))
 }
 
 // Функция изменения статуса задачи
@@ -127,7 +150,7 @@ function changeTaskStatus(id, list) {
     if (task.id == id) {
       task.isComplete = !task.isComplete
     }
-  }) 
+  })
 }
 
 
