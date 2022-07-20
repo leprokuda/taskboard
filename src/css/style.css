@@ -1,5 +1,5 @@
 :root {
-  --accent: #ff7373;
+  --accent: #fd655a;
   --default: rgba(0, 0, 0, 0.3);
 }
 
@@ -43,20 +43,17 @@ header {
   border-radius: 16px;
 }
 
-.taskboard__content {
-}
-
-.taskboard__title {
-}
-
 .taskboard__tasks-count {
+  display: flex;
+  align-items: flex-end;
   margin-top: 20px;
   margin-bottom: 20px;
   font-size: 27px;
+  position: relative;
 }
 
 .taskboard__new {
-  --size: 50px;
+  --size: 45px;
   display: flex;
   margin: 16px 0 32px;
 }
@@ -66,28 +63,51 @@ header {
   font-size: 27px;
   padding: 8px 16px;
   height: var(--size);
-  border: 1px solid var(--default);
+  border: none;
   border-radius: 5px;
   flex-grow: 1;
+  background-color: #fadada;
 }
 
-.taskboard__add,
-.taskboard__task-del {
+.taskboard__add {
   cursor: pointer;
   text-align: center;
   height: var(--size);
   width: var(--size);
   border-radius: var(--size);
-  line-height: calc(var(--size) * 0.95);
+  line-height: calc(var(--size) * 0.99);
   font-size: 32px;
   font-weight: 200;
   background: var(--accent);
   color: white;
-  /* border: 1px solid var(--default); */
+}
+
+.taskboard__task-del {
+  cursor: pointer;
+  background-image: url(../img/trash.svg);
+  width: 30px;
+  height: 35px;
+  display: none;
+  margin-left: auto;
+  margin-right: 5px;
 }
 
 .taskboard__list  > *:not(:last-child) {
   margin-bottom: 16px;
+}
+
+.taskboard__task_selected {
+  background-color: var(--accent);
+  color: white;
+  border-radius: 8px;
+}
+
+.taskboard__task_selected label {
+  visibility: hidden;
+}
+
+.taskboard__task_selected .taskboard__task-del {
+  visibility: hidden;
 }
 
 .taskboard__task {
@@ -129,8 +149,6 @@ header {
   background-image: url(../img/checkmark.svg);
 }
 
-
-
 .taskboard__checkbox div::after {
   content: '';
   display: none;
@@ -145,11 +163,29 @@ header {
   font-size: 27px;
 }
 
-.taskboard__task-del {
-  display: none;
-  
-  margin-left: auto;
-  margin-right: 0;
-  line-height: calc(var(--size) * 0.88);
-  font-size: 44px;
+.taskboard__management {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  position: absolute;
+  right: 0px;
+  /* display: none; */
+}
+
+.taskboard__delete-all {
+  cursor: pointer;
+  background-image: url(../img/trash.svg);
+  width: 30px;
+  height: 35px;
+  margin-right: 10px;
+}
+
+.taskboard__complate-all {
+  height: 30px;
+  width: 30px;
+  border: 1px solid var(--accent);
+  border-radius: 8px;
+  cursor: pointer;
+  background-color: var(--accent);
+  background-image: url(../img/checkmark.svg);
 }

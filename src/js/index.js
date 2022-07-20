@@ -1,8 +1,16 @@
 const dom = {
   new: document.getElementById('new'),
-  btnAdd: document.getElementById('add'),
+  addBtn: document.getElementById('add'),
   tasksList: document.getElementById('tasks'),
-  count: document.getElementById('count')
+  count: document.getElementById('count'),
+  content: document.getElementById('content'),
+  managementBtns: document.getElementById('management'),
+
+  // Проверка: выбрана ли хоть одна задача
+
+  get someSelected () {
+    return tasksList.some(newTask => newTask.selected)
+  }
 }
 
 // Массив задач
@@ -18,7 +26,7 @@ if(localStorage.getItem('taskboard')) {
 
 // Отслеживаем клик по кнопке Добавить задачу
 
-dom.btnAdd.onclick = () => {
+dom.addBtn.onclick = () => {
 
   const newTaskText = dom.new.value
 
@@ -32,15 +40,6 @@ dom.btnAdd.onclick = () => {
   }
 }
 
-// document.addEventListener('keyup', function(ev) {
-//   if (ev.code === 'Enter') {
-//     addTask()
-
-//     dom.new.value = ''
-//     tasksListRender(tasksList)
-//   }
-// })
-
 // Функция добавления задачи
 
 function addTask(text, list) {
@@ -49,9 +48,10 @@ function addTask(text, list) {
   const newTask = {
     id: timeStamp,
     text,
-    isComplete: false
+    isComplete: false,
+    selected: false,    
   }
-
+  
   list.push(newTask)
 
   localStorage.setItem('taskboard', JSON.stringify(tasksList))
@@ -81,7 +81,7 @@ function tasksListRender(list) {
 
   list.forEach((newTask) => {
 
-    const addClass = newTask.isComplete
+    const addCompleteClass = newTask.isComplete
     ? 'taskboard__task taskboard__task_complete'
     : 'taskboard__task'
 
@@ -89,14 +89,22 @@ function tasksListRender(list) {
     ? 'checked'
     : ''
 
+    const addSelectedClass = newTask.selected
+    ? 'taskboard__task_selected' || 'taskboard__task taskboard__task_selected'
+    : ''
+
+    const someSelected = dom.someSelected
+    ? "style='visibility: hidden'"
+    : ''
+
     const taskHtml = `
-    <div id="${newTask.id}" class="${addClass}">
-      <label class="taskboard__checkbox">
+    <div selected="${newTask.selected}" id="${newTask.id}" class="${addCompleteClass} ${addSelectedClass}">
+      <label class="taskboard__checkbox ${someSelected}">
         <input type="checkbox" ${isChecked}>
-        <div class="taskboard__checkbox-container"></div>
+        <div class="taskboard__checkbox-container" ${someSelected}></div>
       </label>
       <div class="taskboard__task-text">${newTask.text}</div>
-      <div class="taskboard__task-del">-</div>
+      <div class="taskboard__task-del" ${someSelected}></div>
     </div>
     `
 
@@ -107,14 +115,32 @@ function tasksListRender(list) {
 
   dom.tasksList.innerHTML = htmlList
 }
+// TODO: Удаление выделенных задач
+// dom.managementBtns.addEventListener('click', (ev) => {
+//   if (ev.target.classList.contains('delete-all')) {
 
-// Отслеживаем клик по чекбоксу задачи
+//   }
+// })
+
+// Отслеживаем клики
 
 dom.tasksList.onclick = (ev) => {
 
   const target = ev.target
+  const isSelectedText = target.classList.contains('taskboard__task-text')
+  const isSelectedTask = target.classList.contains('taskboard__task')
   const isCheckboxEl = target.classList.contains('taskboard__checkbox-container')
   const isDeleteEl = target.classList.contains('taskboard__task-del')
+
+  if (isSelectedText || isSelectedTask) {
+
+    const task = target
+    const taskId = task.getAttribute('id')
+
+    selectedTask (taskId, tasksList)
+
+    tasksListRender(tasksList)
+  }
   
   if (isCheckboxEl) {
 
@@ -141,6 +167,18 @@ dom.tasksList.onclick = (ev) => {
   localStorage.setItem('taskboard', JSON.stringify(tasksList))
 }
 
+// Функция изменения статуса selected
+
+function selectedTask (id, list) {
+
+  list.forEach((task) => {
+
+    if (task.id == id) {
+      task.selected = !task.selected
+    }
+  })
+}
+
 // Функция изменения статуса задачи
 
 function changeTaskStatus(id, list) {
@@ -152,7 +190,6 @@ function changeTaskStatus(id, list) {
     }
   })
 }
-
 
 // Функция удаления задачи
 
