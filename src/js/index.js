@@ -2,15 +2,18 @@ const dom = {
   new: document.getElementById('new'),
   addBtn: document.getElementById('add'),
   tasksList: document.getElementById('tasks'),
-  count: document.getElementById('count'),
+  countAll: document.getElementById('count-all'),
   content: document.getElementById('content'),
   managementBtns: document.getElementById('management'),
+  container: document.getElementById('container'),
+  
 
   // Проверка: выбрана ли хоть одна задача
 
   get someSelected () {
     return tasksList.some(newTask => newTask.selected)
   }
+
 }
 
 // Массив задач
@@ -40,6 +43,26 @@ dom.addBtn.onclick = () => {
   }
 }
 
+// Длбавление задачи по кнопке Enter
+
+dom.new.addEventListener('keydown', function(ev) {
+  
+  const newTaskText = dom.new.value
+  
+  if (ev.key !== 'Enter') {
+    return
+  }
+
+  if (newTaskText && isNotHaveTask(newTaskText, tasksList)) {
+
+    addTask(newTaskText, tasksList)
+
+    dom.new.value = ''
+
+    tasksListRender(tasksList)
+  }
+})
+
 // Функция добавления задачи
 
 function addTask(text, list) {
@@ -49,7 +72,7 @@ function addTask(text, list) {
     id: timeStamp,
     text,
     isComplete: false,
-    selected: false,    
+    selected: false,
   }
   
   list.push(newTask)
@@ -110,19 +133,44 @@ function tasksListRender(list) {
 
     htmlList = htmlList + taskHtml
 
-    renderTasksCount(list)
+    renderTasksCountAll(list)
   })
 
   dom.tasksList.innerHTML = htmlList
 }
-// TODO: Удаление выделенных задач
-// dom.managementBtns.addEventListener('click', (ev) => {
-//   if (ev.target.classList.contains('delete-all')) {
 
-//   }
-// })
+// Отлсеживаем клики в контейнере для получения списка задач и кнопок управления
 
-// Отслеживаем клики
+dom.container.onclick = (ev) => {
+
+  const target = ev.target
+  const managementBtns = target.classList.contains('taskboard__management')
+  const doneBtn = target.classList.contains('taskboard__complete-all')
+  const deleteBtn = target.classList.contains('taskboard__delete-all')
+  const list = target.classList.contains('taskboard__list')
+  const task = target.classList.contains('taskboard__task')
+  const taskSelected = target.getAttribute('selected')
+  const taskId = target.getAttribute('id')
+
+  if (doneBtn) {
+
+    changeSelectedTask(taskSelected, tasksList)
+
+
+
+    tasksListRender(tasksList)
+  }
+
+  if (deleteBtn) {
+
+
+
+    tasksListRender(tasksList)
+  }
+
+  localStorage.setItem('taskboard', JSON.stringify(tasksList))
+}
+// Отслеживаем клики в списке задач
 
 dom.tasksList.onclick = (ev) => {
 
@@ -159,8 +207,6 @@ dom.tasksList.onclick = (ev) => {
 
     deleteTask(taskId, tasksList)
 
-    renderTasksCount(count)
-
     tasksListRender(tasksList)
   }
 
@@ -191,6 +237,17 @@ function changeTaskStatus(id, list) {
   })
 }
 
+// Функция изменения статуса для всех выделенных задач
+
+function changeSelectedTask(selected, list) {
+  list.forEach((task) => {
+    if (task.selected) {
+      task.isComplete = !task.isComplete
+      task.selected = false
+    }
+  })
+}
+
 // Функция удаления задачи
 
 function deleteTask(id, list) {
@@ -202,11 +259,21 @@ function deleteTask(id, list) {
   })
 }
 
+// Удаление выбранных задач
+// TODO: Доделать!
+
+function deleteSelectedTask(selected, list) {
+
+  let result = tasksList.filter(function(task) {
+    return task.selected !== true
+  })
+}
+
 // Вывод количества задач
 
-function renderTasksCount(list) {
+function renderTasksCountAll(list) {
   
-  dom.count.innerHTML = list.length
+  dom.countAll.innerHTML = list.length
   
   if (list.length === undefined) {
     list.length = 0 

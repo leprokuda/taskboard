@@ -43,12 +43,14 @@ header {
   border-radius: 16px;
 }
 
-.taskboard__tasks-count {
-  display: flex;
-  align-items: flex-end;
+.taskboard__content {
+  position: relative;
+}
+
+.taskboard__count {
   margin-top: 20px;
   margin-bottom: 20px;
-  font-size: 27px;
+  font-size: 25px;
   position: relative;
 }
 
@@ -169,7 +171,7 @@ header {
   justify-content: flex-end;
   position: absolute;
   right: 0px;
-  /* display: none; */
+  top: 55px;
 }
 
 .taskboard__delete-all {
@@ -180,7 +182,7 @@ header {
   margin-right: 10px;
 }
 
-.taskboard__complate-all {
+.taskboard__complete-all {
   height: 30px;
   width: 30px;
   border: 1px solid var(--accent);

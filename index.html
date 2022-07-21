@@ -14,16 +14,22 @@
     </div>
   </header>
   <section class="taskboard">
-    <div class="taskboard__container">
+    <div id="container" class="taskboard__container">
       <div id="content" class="taskboard__content">
         <h1 class="taskboard__title">Список задач</h1>
-        <div class="taskboard__tasks-count">
-          <span>Всего задач:</span>
-          <strong id="count">0</strong>
-          <div id="management" class="taskboard__management">
-            <div class="taskboard__delete-all"></div>
-            <div class="taskboard__complate-all"></div>
+        <div class="taskboard__count">
+          <div class="taskboard__count-all">
+            <span>Всего задач:</span>
+            <strong id="count-all">0</strong>
           </div>
+          <div class="taskboard__count-complete">
+            <span>Выполнены:</span>
+            <strong id="count-complete">0</strong>
+          </div>
+        </div>
+        <div id="management" class="taskboard__management">
+          <div class="taskboard__delete-all"></div>
+          <div class="taskboard__complete-all"></div>
         </div>
         <div class="taskboard__new">
           <input id="new" type="text" placeholder="Новая задача">
