@@ -10,12 +10,17 @@
 <body>
   <header>
     <div class="header">
-      <h1>Трекер задач</h1>
+      <h1>Infinity Task</h1>
     </div>
   </header>
   <section class="taskboard">
     <div id="container" class="taskboard__container">
       <div id="content" class="taskboard__content">
+        <select id="filter" class="taskboard__options">
+          <option value="false">активные</option>
+          <option value="true">завершённые</option>
+          <option value="">все</option>
+        </select>
         <h1 class="taskboard__title">Список задач</h1>
         <div class="taskboard__count">
           <div class="taskboard__count-all">

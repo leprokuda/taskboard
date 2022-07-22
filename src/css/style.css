@@ -1,5 +1,25 @@
+@font-face {
+	font-family: 'Gilroy-Medium';
+	src: url('../fonts/gilroy-medium.eot'); /* IE 9 Compatibility Mode */
+	src: url('../fonts/gilroy-medium.eot?#iefix') format('embedded-opentype'), /* IE < 9 */
+		url('../fonts/gilroy-medium.woff2') format('woff2'), /* Super Modern Browsers */
+		url('../fonts/gilroy-medium.woff') format('woff'), /* Firefox >= 3.6, any other modern browser */
+		url('../fonts/gilroy-medium.ttf') format('truetype'), /* Safari, Android, iOS */
+		url('../fonts/gilroy-medium.svg#gilroy-medium') format('svg'); /* Chrome < 4, Legacy iOS */
+}
+
+@font-face {
+	font-family: 'Gilroy-Bold';
+	src: url('../fonts/gilroy-bold.eot'); /* IE 9 Compatibility Mode */
+	src: url('../fonts/gilroy-bold.eot?#iefix') format('embedded-opentype'), /* IE < 9 */
+		url('../fonts/gilroy-bold.woff2') format('woff2'), /* Super Modern Browsers */
+		url('../fonts/gilroy-bold.woff') format('woff'), /* Firefox >= 3.6, any other modern browser */
+		url('../fonts/gilroy-bold.ttf') format('truetype'), /* Safari, Android, iOS */
+		url('../fonts/gilroy-bold.svg#gilroy-bold') format('svg'); /* Chrome < 4, Legacy iOS */
+}
+
 :root {
-  --accent: #fd655a;
+  --accent: #ff0000a6;
   --default: rgba(0, 0, 0, 0.3);
 }
 
@@ -15,6 +35,7 @@ body {
   padding: 32px;
   font-size: 22px;
   font-weight: 300;
+  font-family: 'Gilroy-Medium';
 }
 
 header {
@@ -29,6 +50,7 @@ header {
   width: 300px;
   border-radius: 16px;
   padding: 5px 5px;
+  color: #0a0a0a;
 }
 
 .taskboard {
@@ -45,6 +67,20 @@ header {
 
 .taskboard__content {
   position: relative;
+}
+
+.taskboard__options {
+  position: absolute;
+  right: 0;
+  top: 10px;
+  width: 150px;
+  height: 30px;
+  background-color: #fadada;
+  border: 1px solid var(--accent);
+  border-radius: 8px;
+  font-weight: 300;
+  font-family: 'Gilroy-Medium';
+  font-size: 18px;
 }
 
 .taskboard__count {

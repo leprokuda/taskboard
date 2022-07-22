@@ -6,7 +6,8 @@ const dom = {
   content: document.getElementById('content'),
   managementBtns: document.getElementById('management'),
   container: document.getElementById('container'),
-  
+  countComplete: document.getElementById('count-complete'),
+  filter: document.getElementById('filter'),
 
   // Проверка: выбрана ли хоть одна задача
 
@@ -134,6 +135,7 @@ function tasksListRender(list) {
     htmlList = htmlList + taskHtml
 
     renderTasksCountAll(list)
+    renderTaskCountComplete(list)
   })
 
   dom.tasksList.innerHTML = htmlList
@@ -156,14 +158,12 @@ dom.container.onclick = (ev) => {
 
     changeSelectedTask(taskSelected, tasksList)
 
-
-
     tasksListRender(tasksList)
   }
 
   if (deleteBtn) {
 
-
+    // deleteSelectedTask(result, tasksList)
 
     tasksListRender(tasksList)
   }
@@ -175,12 +175,11 @@ dom.container.onclick = (ev) => {
 dom.tasksList.onclick = (ev) => {
 
   const target = ev.target
-  const isSelectedText = target.classList.contains('taskboard__task-text')
   const isSelectedTask = target.classList.contains('taskboard__task')
   const isCheckboxEl = target.classList.contains('taskboard__checkbox-container')
   const isDeleteEl = target.classList.contains('taskboard__task-del')
 
-  if (isSelectedText || isSelectedTask) {
+  if (isSelectedTask) {
 
     const task = target
     const taskId = task.getAttribute('id')
@@ -211,6 +210,54 @@ dom.tasksList.onclick = (ev) => {
   }
 
   localStorage.setItem('taskboard', JSON.stringify(tasksList))
+}
+
+// Добавление инпута (для редактирования) по двойному клику на задачу. Редактирование задачи
+
+dom.tasksList.ondblclick = (ev) => {
+
+  const target = ev.target
+  const isSelectedText = target.classList.contains('taskboard__task-text')
+  
+  if (isSelectedText) {
+    const taskText = target
+    let textContent = target.textContent
+
+    console.log(textContent)
+    textContent = ''
+    let edit = document.createElement('input')
+    edit.value = textContent
+    
+    target.appendChild(edit)
+
+    let self = target
+
+    edit.addEventListener('keypress', function(ev) {
+
+      if (ev.key == 'Enter') {
+        self.textContent = edit.value;
+      }
+    })
+  }
+  localStorage.setItem('taskboard', JSON.stringify(tasksList))
+}
+
+// Фильтрация задач
+
+dom.filter.onchange = (ev) => {
+
+  const value = ev.target.value
+
+  const filteredTasks = tasksList.filter(task => {
+    const reg = new RegExp(value)
+
+    if (reg.test(task.isComplete)) {
+      return true
+    } else {
+      return false
+    }
+  })
+  tasksListRender(filteredTasks, tasksList)
 }
 
 // Функция изменения статуса selected
@@ -269,13 +316,36 @@ function deleteSelectedTask(selected, list) {
   })
 }
 
-// Вывод количества задач
+function checkComplite(list) {
+  
+}
+
+// Вывод общего количества задач
 
 function renderTasksCountAll(list) {
   
   dom.countAll.innerHTML = list.length
-  
+
   if (list.length === undefined) {
     list.length = 0 
   }
+}
+
+// Вывод выполненных здач
+
+function renderTaskCountComplete(tasksList) {
+
+  let countC = 0
+  
+  tasksList.forEach((task) => {
+    if(task.isComplete) {
+      countC++
+    }
+  })
+
+  dom.countComplete.innerHTML = countC
+}
+
+function filterTasks (list) {
+
 }
