@@ -14,16 +14,15 @@ const dom = {
   get someSelected () {
     return tasksList.some(newTask => newTask.selected)
   }
-
 }
 
 // Массив задач
 
-let tasksList = JSON.parse(localStorage.tasksList || "[]")
+let tasksList = []
 
 // Возвращение данных из localstorage на страницу
 
-if(localStorage.getItem('taskboard')) {
+if (localStorage.getItem('taskboard')) {
   tasksList = JSON.parse(localStorage.getItem('taskboard') || "[]")
   tasksListRender(tasksList)
 }
@@ -40,7 +39,7 @@ dom.addBtn.onclick = () => {
 
     dom.new.value = ''
 
-    tasksListRender(tasksList)
+    changeLocalStorage(tasksList)
   }
 }
 
@@ -59,8 +58,6 @@ dom.new.addEventListener('keydown', function(ev) {
     addTask(newTaskText, tasksList)
 
     dom.new.value = ''
-
-    tasksListRender(tasksList)
   }
 })
 
@@ -78,7 +75,7 @@ function addTask(text, list) {
   
   list.push(newTask)
 
-  localStorage.setItem('taskboard', JSON.stringify(tasksList))
+  changeLocalStorage(list)
 }
 
 // Проверка существования одинаковых задач
@@ -157,18 +154,12 @@ dom.container.onclick = (ev) => {
   if (doneBtn) {
 
     changeSelectedTask(taskSelected, tasksList)
-
-    tasksListRender(tasksList)
   }
 
   if (deleteBtn) {
 
-    // deleteSelectedTask(result, tasksList)
-
-    tasksListRender(tasksList)
+    deleteSelectedTask(taskSelected, tasksList)
   }
-
-  localStorage.setItem('taskboard', JSON.stringify(tasksList))
 }
 // Отслеживаем клики в списке задач
 
@@ -185,8 +176,6 @@ dom.tasksList.onclick = (ev) => {
     const taskId = task.getAttribute('id')
 
     selectedTask (taskId, tasksList)
-
-    tasksListRender(tasksList)
   }
   
   if (isCheckboxEl) {
@@ -195,8 +184,6 @@ dom.tasksList.onclick = (ev) => {
     const taskId = task.getAttribute('id')
 
     changeTaskStatus(taskId, tasksList)
-
-    tasksListRender(tasksList)
   }
 
   if (isDeleteEl) {
@@ -205,11 +192,7 @@ dom.tasksList.onclick = (ev) => {
     const taskId = task.getAttribute('id')
 
     deleteTask(taskId, tasksList)
-
-    tasksListRender(tasksList)
   }
-
-  localStorage.setItem('taskboard', JSON.stringify(tasksList))
 }
 
 // Добавление инпута (для редактирования) по двойному клику на задачу. Редактирование задачи
@@ -217,29 +200,30 @@ dom.tasksList.onclick = (ev) => {
 dom.tasksList.ondblclick = (ev) => {
 
   const target = ev.target
-  const isSelectedText = target.classList.contains('taskboard__task-text')
+  const isClickedText = target.classList.contains('taskboard__task-text')
   
-  if (isSelectedText) {
+  if (isClickedText) {
+
     const taskText = target
     let textContent = target.textContent
 
-    console.log(textContent)
     textContent = ''
-    let edit = document.createElement('input')
-    edit.value = textContent
+
+    let editInput = document.createElement('input')
+    editInput.value = textContent
     
-    target.appendChild(edit)
+    target.appendChild(editInput)
 
     let self = target
 
-    edit.addEventListener('keypress', function(ev) {
+    editInput.addEventListener('keypress', function(ev) {
 
       if (ev.key == 'Enter') {
-        self.textContent = edit.value;
+        self.textContent = editInput.value;
+        changeLocalStorage(tasksList)
       }
     })
   }
-  localStorage.setItem('taskboard', JSON.stringify(tasksList))
 }
 
 // Фильтрация задач
@@ -270,6 +254,7 @@ function selectedTask (id, list) {
       task.selected = !task.selected
     }
   })
+  changeLocalStorage(list)
 }
 
 // Функция изменения статуса задачи
@@ -282,6 +267,7 @@ function changeTaskStatus(id, list) {
       task.isComplete = !task.isComplete
     }
   })
+  changeLocalStorage(list)
 }
 
 // Функция изменения статуса для всех выделенных задач
@@ -293,6 +279,7 @@ function changeSelectedTask(selected, list) {
       task.selected = false
     }
   })
+  changeLocalStorage(list)
 }
 
 // Функция удаления задачи
@@ -304,20 +291,16 @@ function deleteTask(id, list) {
       list.splice(idx, 1)
     }
   })
+  changeLocalStorage(list)
 }
 
 // Удаление выбранных задач
-// TODO: Доделать!
 
 function deleteSelectedTask(selected, list) {
 
-  let result = tasksList.filter(function(task) {
-    return task.selected !== true
-  })
-}
+  const filteredTasks = list.filter(task => !task.selected)
 
-function checkComplite(list) {
-  
+  changeLocalStorage(filteredTasks)
 }
 
 // Вывод общего количества задач
@@ -342,10 +325,17 @@ function renderTaskCountComplete(tasksList) {
       countC++
     }
   })
-
   dom.countComplete.innerHTML = countC
 }
 
-function filterTasks (list) {
+// Функция обновления localStorage
 
+function changeLocalStorage(newList) {
+
+  localStorage.clear()
+  localStorage.setItem('taskboard', JSON.stringify(newList))
+  
+  tasksList = newList
+
+  tasksListRender(newList, tasksList)
 }
