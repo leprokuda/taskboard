@@ -46,12 +46,10 @@ dom.addBtn.onclick = () => {
 // Длбавление задачи по кнопке Enter
 
 dom.new.addEventListener('keydown', function(ev) {
+
+  if (ev.key !== 'Enter') return;
   
   const newTaskText = dom.new.value
-  
-  if (ev.key !== 'Enter') {
-    return
-  }
 
   if (newTaskText && isNotHaveTask(newTaskText, tasksList)) {
 
@@ -201,7 +199,9 @@ dom.tasksList.ondblclick = (ev) => {
 
   const target = ev.target
   const isClickedText = target.classList.contains('taskboard__task-text')
-  
+  const taskContainer = target.closest("div[class='taskboard__task ']")
+  const taskId = taskContainer.getAttribute("id");
+
   if (isClickedText) {
 
     const taskText = target
@@ -214,16 +214,21 @@ dom.tasksList.ondblclick = (ev) => {
     
     target.appendChild(editInput)
 
-    let self = target
-
     editInput.addEventListener('keypress', function(ev) {
 
       if (ev.key == 'Enter') {
-        self.textContent = editInput.value;
-        changeLocalStorage(tasksList)
+        taskText.textContent = editInput.value;
+        console.log(taskId)
+        changeTaskText(taskId, tasksList, editInput.value)
       }
     })
   }
+}
+
+function changeTaskText(taskId, list, text) {
+  const task = list.find(taskEl => taskEl.id.toString() === taskId);
+  task.text = text;
+  changeLocalStorage(list)
 }
 
 // Фильтрация задач
